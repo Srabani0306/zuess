@@ -64,7 +64,7 @@ For a nested menu item, send `{ "groupId", "parentId", "label", "href", "descrip
 
 ### `POST /api/admin/upload`
 
-Multipart form data with `file` and optional `alt`. Accepts image MIME types up to 5MB. The current development adapter writes to `public/uploads` and creates a media record in Turso.
+Multipart form data with `file` and optional `alt`. Accepts image MIME types up to 5MB. Development writes to `public/uploads`; Vercel deployments require `BLOB_READ_WRITE_TOKEN` and use Vercel Blob. Both modes create a media record in Turso.
 
 ### `GET /api/admin/testimonials` / `POST /api/admin/testimonials`
 
