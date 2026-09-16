@@ -1,0 +1,33 @@
+{
+  "name": "zuess-ca",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:push": "drizzle-kit push",
+    "db:seed": "node scripts/setup-db.js",
+    "db:setup": "node scripts/setup-db.js",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.18.0",
+    "bcryptjs": "^3.0.3",
+    "drizzle-orm": "^0.45.2",
+    "framer-motion": "^11.3.19",
+    "jose": "^6.2.12",
+    "lucide-react": "^0.417.0",
+    "next": "14.2.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.19",
+    "dotenv": "^17.2.2",
+    "drizzle-kit": "^0.31.10",
+    "postcss": "^8.4.40",
+    "tailwindcss": "^3.4.7"
+  }
+}
