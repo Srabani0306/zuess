@@ -23,6 +23,11 @@ const statements = [
   `CREATE TABLE IF NOT EXISTS permissions (id TEXT PRIMARY KEY, key TEXT NOT NULL UNIQUE, label TEXT NOT NULL, group_name TEXT NOT NULL DEFAULT 'General', created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL)`,
   `CREATE TABLE IF NOT EXISTS role_permissions (id TEXT PRIMARY KEY, role_id TEXT NOT NULL REFERENCES roles(id) ON DELETE CASCADE, permission_id TEXT NOT NULL REFERENCES permissions(id) ON DELETE CASCADE, created_at INTEGER NOT NULL)`,
   `CREATE TABLE IF NOT EXISTS password_resets (id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, token_hash TEXT NOT NULL UNIQUE, expires_at INTEGER NOT NULL, used_at INTEGER, created_at INTEGER NOT NULL)`,
+  `CREATE TABLE IF NOT EXISTS team_members (id TEXT PRIMARY KEY, slug TEXT NOT NULL UNIQUE, name TEXT NOT NULL, role TEXT NOT NULL, qualification TEXT, focus TEXT, experience_years INTEGER, bio TEXT, photo TEXT, email TEXT, phone TEXT, linkedin TEXT, sort_order INTEGER NOT NULL DEFAULT 0, published INTEGER NOT NULL DEFAULT 1, created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL)`,
+  `CREATE TABLE IF NOT EXISTS blog_images (id TEXT PRIMARY KEY, blog_post_id TEXT NOT NULL REFERENCES blog_posts(id) ON DELETE CASCADE, url TEXT NOT NULL, alt TEXT, sort_order INTEGER NOT NULL DEFAULT 0, created_at INTEGER NOT NULL)`,
+  `CREATE TABLE IF NOT EXISTS social_links (id TEXT PRIMARY KEY, platform TEXT NOT NULL, url TEXT NOT NULL, sort_order INTEGER NOT NULL DEFAULT 0, published INTEGER NOT NULL DEFAULT 1, created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL)`,
+  `CREATE TABLE IF NOT EXISTS blog_likes (id TEXT PRIMARY KEY, blog_post_id TEXT NOT NULL REFERENCES blog_posts(id) ON DELETE CASCADE, visitor_id TEXT NOT NULL, created_at INTEGER NOT NULL)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS blog_likes_post_visitor_unique ON blog_likes (blog_post_id, visitor_id)`,
 ];
 
 const PERMISSIONS = PERMISSION_CATALOG.map((permission) => [permission.key, permission.label, permission.group]);
@@ -58,6 +63,7 @@ async function main() {
   for (const sql of statements) await client.execute(sql);
   try { await client.execute("ALTER TABLE users ADD COLUMN role_id TEXT REFERENCES roles(id)"); } catch { /* column already exists */ }
   try { await client.execute("ALTER TABLE enquiries ADD COLUMN is_read INTEGER NOT NULL DEFAULT 0"); } catch { /* column already exists */ }
+  try { await client.execute("ALTER TABLE blog_posts ADD COLUMN like_count INTEGER NOT NULL DEFAULT 0"); } catch { /* column already exists */ }
 
   for (const [key, label, group] of PERMISSIONS) {
     await client.execute({ sql: "INSERT INTO permissions (id,key,label,group_name,created_at,updated_at) VALUES (?,?,?,?,?,?) ON CONFLICT(key) DO UPDATE SET label=excluded.label, group_name=excluded.group_name, updated_at=excluded.updated_at", args: [id(), key, label, group, now, now] });
