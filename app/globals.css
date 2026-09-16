@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  /* background-color: #F3F1E9; */
+   background-color: #fff;
+  color: #20232B;
+  font-feature-settings: "ss01" on, "ss02" on;
+}
+
+/* faint ledger rule-lines used as a section background */
+.ledger-bg {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 35px,
+    #D6D1BF 36px
+  );
+}
+
+.ledger-bg-dark {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 35px,
+    rgba(255, 255, 255, 0.06) 36px
+  );
+}
+
+/* numeral tabular alignment for figures, like a real ledger */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: #1F6F54;
+  color: #F3E8D2;
+}
+
+/* visible keyboard focus */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #C0954A;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.container-content {
+  max-width: 1240px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* Continuously rotating gradient border, e.g. for hero CTAs */
+@property --border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes border-rotate {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+.neon-border {
+  position: relative;
+  isolation: isolate;
+}
+
+.neon-border::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(from var(--border-angle), #1f6f54, #c0954a, #1f6f54, #c0954a, #1f6f54);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: border-rotate 3s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Right-to-left ticker scroll for the news marquee */
+@keyframes marquee-rtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-rtl {
+  animation: marquee-rtl 10s linear infinite;
+}
+
+.animate-marquee-rtl:hover {
+  animation-play-state: paused;
+}
+
+/* Slow highlight sweep across headline text */
+@keyframes text-shimmer-sweep {
+  to {
+    background-position: -200% center;
+  }
+}
+
+.text-shimmer {
+  background-image: linear-gradient(100deg, #101b33 0%, #101b33 42%, #1f6f54 50%, #101b33 58%, #101b33 100%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: text-shimmer-sweep 5s linear infinite;
+}
